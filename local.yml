@@ -1,0 +1,75 @@
+version: "3.9"
+services:
+    api:
+        build:
+            context: .
+            dockerfile: ./docker/local/django/Dockerfile
+        command: /start
+        container_name: django-api
+        volumes:
+            - .:/app
+            - static_volume:/app/staticfiles
+            - media_volume:/app/mediafiles
+        ports:
+            - "8000:8000"
+        # expose:
+        #     - "8000"
+        env_file:
+            - ./.envs/.local/.django
+            - ./.envs/.local/.postgres
+        depends_on:
+            - postgres
+            # - mailhog
+            # - redis
+        networks:
+            - dsgaff-api-live
+    # client:
+    #     build:
+    #         context: ./client
+    #         dockerfile: ./docker/local/Dockerfile
+            
+    #     restart: on-failure
+    #     volumes:
+    #         - ./client:/app
+    #         - /app/node_modules
+    #     networks:
+    #         - dsgaff-api-live            
+
+    postgres:
+        build:
+            context: .
+            dockerfile: ./docker/local/postgres/Dockerfile
+        container_name: postgres
+        volumes:
+            - local_postgres_data:/var/lib/postgresql/data
+            - local_postgres_data_backups:/backups
+        env_file:
+            - ./.envs/.local/.postgres
+        networks:
+            - dsgaff-api-live
+
+    # nginx:
+    #     restart: always
+    #     depends_on:
+    #         - api
+    #     volumes:
+    #         - static_volume:/app/staticfiles
+    #         - media_volume:/app/mediafiles
+    #     build:
+    #         context: ./docker/local/nginx
+    #         dockerfile: Dockerfile
+    #     ports:
+    #         - "8080:80"
+    #     networks:
+    #         - dsgaff-api-live          
+
+
+networks:
+    dsgaff-api-live:
+        driver: bridge
+
+volumes:
+    local_postgres_data: {}
+    local_postgres_data_backups: {}
+    static_volume:
+    media_volume:
