@@ -23,17 +23,17 @@ services:
             # - redis
         networks:
             - dsgaff-api-live
-    # client:
-    #     build:
-    #         context: ./client
-    #         dockerfile: ./docker/local/Dockerfile
+    client:
+        build:
+            context: ./client
+            dockerfile: ./docker/local/Dockerfile
             
-    #     restart: on-failure
-    #     volumes:
-    #         - ./client:/app
-    #         - /app/node_modules
-    #     networks:
-    #         - dsgaff-api-live            
+        restart: on-failure
+        volumes:
+            - ./client:/app
+            - /app/node_modules
+        networks:
+            - dsgaff-api-live            
 
     postgres:
         build:
