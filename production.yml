@@ -14,10 +14,10 @@ services:
         #     - redis
         networks:
             - reverseproxy-nw
-    client:
-        build:
-            context: ./client
-            dockerfile: ./docker/local/Dockerfile            
+    # client:
+    #     build:
+    #         context: ./client
+    #         dockerfile: ./docker/local/Dockerfile            
 
     # redis:
     #     image: redis:6-alpine
